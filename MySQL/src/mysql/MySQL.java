@@ -14,30 +14,20 @@ import java.util.logging.*;
 public class MySQL {
 
     //<editor-fold defaultstate="collapsed" desc="Declarations">
-    Connection con;
+    private Connection con;
+    private String url;
+    private String user;
+    private String password;
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Constructor">
     /**
      * In this method the connection with the database will be initiated.
      */
-    public MySQL(String server, String database, String user, String password) {
-        String url = "jdbc:mysql://" + server + ":3306/" + database;
-        try {
-            con = DriverManager.getConnection(url, user, password);
-        } catch (SQLException ex) {
-            Logger lgr = Logger.getLogger(MySQL.class.getName());
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
-        } finally {
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException ex) {
-                Logger lgr = Logger.getLogger(MySQL.class.getName());
-                lgr.log(Level.SEVERE, ex.getMessage(), ex);
-            }
-        }
+    public MySQL(String server, int port, String database, String user, String password) {
+        this.url = "jdbc:mysql://" + server + ":" + port + "/" + database;
+	this.user = user;
+	this.password = password;
     }
     //</editor-fold>
     
@@ -50,8 +40,8 @@ public class MySQL {
      */
     public void setSQL(String sql, ArrayList<String> parameters) {
         PreparedStatement pst = null;
-        
         try {
+            con = DriverManager.getConnection(url, user, password);
             pst = con.prepareStatement(sql);
             for (int i = 1; i <= parameters.size(); i++) {
                 pst.setString(i, parameters.get(i));
@@ -62,9 +52,6 @@ public class MySQL {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         } finally {
             try {
-                if (pst != null) {
-                    pst.close();
-                }
                 if (con != null) {
                     con.close();
                 }
