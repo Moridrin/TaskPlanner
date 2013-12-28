@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui.MySQL;
+package gui.mysql;
 
 import gui.MainFrame;
 import java.awt.Window;
@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import connections.MySQL;
+import forminterface.ParentFormInterface;
 
 /**
  *
@@ -23,10 +24,10 @@ import connections.MySQL;
 public class ConnectionSettingsPanel extends javax.swing.JPanel {
 
     MySQL conn;
-    MainFrame observer;
+    ParentFormInterface parent;
 
-    public void setObserver(MainFrame observer) {
-        this.observer = observer;
+    public void setParent(ParentFormInterface parent) {
+        this.parent = parent;
     }
 
     /**
@@ -159,7 +160,9 @@ public class ConnectionSettingsPanel extends javax.swing.JPanel {
     private void jButtonConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectActionPerformed
         // TODO add your handling code here:
         conn = new connections.MySQL(jTextFieldServer.getText(), Integer.parseInt(jTextFieldPort.getText()), jTextFieldDatabase.getText(), jTextFieldUsername.getText(), jTextFieldPassword.getText());
-        observer.updateSettings(conn);
+        ArrayList<Object> args = new ArrayList<>();
+        args.add(conn);
+        parent.UpdateForm("updateSettings", args);
     }//GEN-LAST:event_jButtonConnectActionPerformed
 
 

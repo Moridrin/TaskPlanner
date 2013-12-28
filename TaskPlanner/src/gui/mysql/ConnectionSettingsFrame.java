@@ -1,10 +1,11 @@
 //<editor-fold defaultstate="collapsed" desc="Jibberish">
-package gui.MySQL;
+package gui.mysql;
 
 import gui.MainFrame;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import connections.MySQL;
+import forminterface.ParentFormInterface;
 //</editor-fold>
 
 /**
@@ -25,8 +26,8 @@ public class ConnectionSettingsFrame extends javax.swing.JFrame {
     //</editor-fold>
 
     //<editor-fold desc="Functions">
-    public void setObserver(MainFrame observer){
-        connectionSettingsPanel.setObserver(observer);
+    public void setParent(ParentFormInterface parent){
+        connectionSettingsPanel.setParent(parent);
     }
     public MySQL getSettings(){
         return connectionSettingsPanel.getSettings();
@@ -43,7 +44,7 @@ public class ConnectionSettingsFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        connectionSettingsPanel = new gui.MySQL.ConnectionSettingsPanel();
+        connectionSettingsPanel = new gui.mysql.ConnectionSettingsPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -97,7 +98,7 @@ public class ConnectionSettingsFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private gui.MySQL.ConnectionSettingsPanel connectionSettingsPanel;
+    private gui.mysql.ConnectionSettingsPanel connectionSettingsPanel;
     // End of variables declaration//GEN-END:variables
     //</editor-fold>
 }

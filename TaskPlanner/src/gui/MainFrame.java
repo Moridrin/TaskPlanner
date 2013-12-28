@@ -5,23 +5,17 @@
  */
 package gui;
 
-import java.awt.AWTEvent;
-import java.awt.event.AWTEventListener;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.SwingWorker;
+import java.io.*;
+import java.util.*;
 import connections.MySQL;
-import gui.MySQL.ConnectionSettingsFrame;
+import forminterface.ParentFormInterface;
+import gui.mysql.ConnectionSettingsFrame;
 
 /**
  *
  * @author jeroen
  */
-public class MainFrame extends javax.swing.JFrame {
+public class MainFrame extends javax.swing.JFrame implements ParentFormInterface {
 
     private MySQL connectionSettings;
     ConnectionSettingsFrame connectionSettingsFrame;
@@ -31,13 +25,51 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         initComponents();
-        jLabelSuccess.setVisible(false);
+    }
+    
+    private void loadSettings(){
+        File f = new File("ServerSettings.ser");
+        if (f.exists()) {
+            try {
+                FileInputStream file = new FileInputStream("ServerSettings.ser");
+                ObjectInputStream stream = new ObjectInputStream(file);
+                connectionSettings = (MySQL) stream.readObject();
+                stream.close();
+                file.close();
+                jMenuItemConnect.setEnabled(false);
+                jMenuItemDisconnect.setEnabled(true);
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            } catch (ClassNotFoundException exception) {
+                System.out.println("Employee class not found");
+                exception.printStackTrace();
+            }
+        }
     }
 
-    public void updateSettings(MySQL connectionSettings) {
+    private void updateSettings(MySQL connectionSettings) {
         this.connectionSettings = connectionSettings;
-        connectionSettingsFrame.dispose();
-        jButtonTest.setEnabled(true);
+        if (connectionSettingsFrame != null) {
+            connectionSettingsFrame.dispose();
+        }
+        if (connectionSettings != null) {
+            try {
+                FileOutputStream fileOut = new FileOutputStream("ServerSettings.ser");
+                ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                out.writeObject(connectionSettings);
+                out.close();
+                fileOut.close();
+            } catch (IOException i) {
+                i.printStackTrace();
+            }
+            jMenuItemConnect.setEnabled(false);
+            jMenuItemDisconnect.setEnabled(true);
+        } else {
+            File file = new File("ServerSettings.ser");
+            file.delete();
+            jMenuItemConnect.setEnabled(true);
+            jMenuItemDisconnect.setEnabled(false);
+        }
     }
 
     /**
@@ -49,82 +81,60 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButtonConnectToServer = new javax.swing.JButton();
-        jButtonTest = new javax.swing.JButton();
-        jLabelSuccess = new javax.swing.JLabel();
+        jMenuBar = new javax.swing.JMenuBar();
+        jMenuServer = new javax.swing.JMenu();
+        jMenuItemConnect = new javax.swing.JMenuItem();
+        jMenuItemDisconnect = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButtonConnectToServer.setText("Connect To Server");
-        jButtonConnectToServer.addActionListener(new java.awt.event.ActionListener() {
+        jMenuServer.setText("Server");
+        jMenuServer.setToolTipText("");
+
+        jMenuItemConnect.setText("Connect");
+        jMenuItemConnect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonConnectToServerActionPerformed(evt);
+                jMenuItemConnectActionPerformed(evt);
             }
         });
+        jMenuServer.add(jMenuItemConnect);
 
-        jButtonTest.setText("Test");
-        jButtonTest.setEnabled(false);
-        jButtonTest.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemDisconnect.setText("Disconnect");
+        jMenuItemDisconnect.setEnabled(false);
+        jMenuItemDisconnect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonTestActionPerformed(evt);
+                jMenuItemDisconnectActionPerformed(evt);
             }
         });
+        jMenuServer.add(jMenuItemDisconnect);
 
-        jLabelSuccess.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelSuccess.setText("Success!");
-        jLabelSuccess.setToolTipText("");
+        jMenuBar.add(jMenuServer);
+
+        setJMenuBar(jMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelSuccess, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(178, 178, 178)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jButtonConnectToServer)
-                    .addComponent(jButtonTest))
-                .addContainerGap(181, Short.MAX_VALUE))
+            .addGap(0, 500, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButtonConnectToServer)
-                .addGap(18, 18, 18)
-                .addComponent(jButtonTest)
-                .addGap(18, 18, 18)
-                .addComponent(jLabelSuccess)
-                .addContainerGap(103, Short.MAX_VALUE))
+            .addGap(0, 205, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonConnectToServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectToServerActionPerformed
-        connectionSettingsFrame = new gui.MySQL.ConnectionSettingsFrame();
+    private void jMenuItemConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConnectActionPerformed
+        connectionSettingsFrame = new gui.mysql.ConnectionSettingsFrame();
         connectionSettingsFrame.setVisible(true);
-        connectionSettingsFrame.setObserver(this);
-    }//GEN-LAST:event_jButtonConnectToServerActionPerformed
+        connectionSettingsFrame.setParent(this);
+    }//GEN-LAST:event_jMenuItemConnectActionPerformed
 
-    private void jButtonTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTestActionPerformed
-        ArrayList<String> parameters = new ArrayList<String>();
-        parameters.add("jeroen");
-        parameters.add("MP.Berkvens@Gmail.com");
-        parameters.add("Power");
-        try {
-            connectionSettings.setSQL("INSERT INTO User (UserName, UserEmail, UserPassword) VALUES (?,?,?);", parameters);
-        } catch (SQLException ex) {
-            Logger lgr = Logger.getLogger(MySQL.class.getName());
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
-            jLabelSuccess.setText(ex.getMessage());
-        } finally {
-            jLabelSuccess.setVisible(true);
-        }
-    }//GEN-LAST:event_jButtonTestActionPerformed
+    private void jMenuItemDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDisconnectActionPerformed
+        updateSettings(null);
+    }//GEN-LAST:event_jMenuItemDisconnectActionPerformed
 
     /**
      * @param args the command line arguments
@@ -167,13 +177,17 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonConnectToServer;
-    private javax.swing.JButton jButtonTest;
-    private javax.swing.JLabel jLabelSuccess;
+    private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JMenuItem jMenuItemConnect;
+    private javax.swing.JMenuItem jMenuItemDisconnect;
+    private javax.swing.JMenu jMenuServer;
     // End of variables declaration//GEN-END:variables
 
-    /*@Override
-     public void eventDispatched(AWTEvent event) {
-     jButtonConnectToServer.setText(event.getSource().getClass().toString());
-     }*/
+    @Override
+    public void UpdateForm(String function, ArrayList<Object> args) {
+        if (function.equals("updateSettings")) {
+            MySQL arg = (MySQL) args.get(0);
+            updateSettings(arg);
+        }
+    }
 }
