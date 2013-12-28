@@ -14,7 +14,7 @@ import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingWorker;
-import mysql.MySQL;
+import connections.MySQL;
 import gui.MySQL.ConnectionSettingsFrame;
 
 /**

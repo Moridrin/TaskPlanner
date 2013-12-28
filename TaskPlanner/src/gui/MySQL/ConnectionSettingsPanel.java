@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import mysql.MySQL;
+import connections.MySQL;
 
 /**
  *
@@ -158,7 +158,7 @@ public class ConnectionSettingsPanel extends javax.swing.JPanel {
 
     private void jButtonConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectActionPerformed
         // TODO add your handling code here:
-        conn = new mysql.MySQL(jTextFieldServer.getText(), Integer.parseInt(jTextFieldPort.getText()), jTextFieldDatabase.getText(), jTextFieldUsername.getText(), jTextFieldPassword.getText());
+        conn = new connections.MySQL(jTextFieldServer.getText(), Integer.parseInt(jTextFieldPort.getText()), jTextFieldDatabase.getText(), jTextFieldUsername.getText(), jTextFieldPassword.getText());
         observer.updateSettings(conn);
     }//GEN-LAST:event_jButtonConnectActionPerformed
 

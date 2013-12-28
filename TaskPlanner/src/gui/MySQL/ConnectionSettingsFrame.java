@@ -4,7 +4,7 @@ package gui.MySQL;
 import gui.MainFrame;
 import java.util.ArrayList;
 import javax.swing.JFrame;
-import mysql.MySQL;
+import connections.MySQL;
 //</editor-fold>
 
 /**
