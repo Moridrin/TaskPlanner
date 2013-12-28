@@ -10,6 +10,12 @@ import java.util.*;
 import connections.MySQL;
 import forminterface.ParentFormInterface;
 import gui.mysql.ConnectionSettingsFrame;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+import javax.swing.ListModel;
 
 /**
  *
@@ -25,6 +31,7 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
      */
     public MainFrame() {
         initComponents();
+        loadSettings();
     }
     
     private void loadSettings(){
@@ -81,12 +88,17 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList = new javax.swing.JList();
         jMenuBar = new javax.swing.JMenuBar();
         jMenuServer = new javax.swing.JMenu();
         jMenuItemConnect = new javax.swing.JMenuItem();
         jMenuItemDisconnect = new javax.swing.JMenuItem();
+        jMenuItemTestSELECT = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jScrollPane2.setViewportView(jList);
 
         jMenuServer.setText("Server");
         jMenuServer.setToolTipText("");
@@ -108,6 +120,14 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
         });
         jMenuServer.add(jMenuItemDisconnect);
 
+        jMenuItemTestSELECT.setText("Test SELECT");
+        jMenuItemTestSELECT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemTestSELECTActionPerformed(evt);
+            }
+        });
+        jMenuServer.add(jMenuItemTestSELECT);
+
         jMenuBar.add(jMenuServer);
 
         setJMenuBar(jMenuBar);
@@ -116,11 +136,13 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 205, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
 
         pack();
@@ -135,6 +157,31 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     private void jMenuItemDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDisconnectActionPerformed
         updateSettings(null);
     }//GEN-LAST:event_jMenuItemDisconnectActionPerformed
+
+    private void jMenuItemTestSELECTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTestSELECTActionPerformed
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("UserName");
+        columns.add("UserEmail");
+        ArrayList<String[]> databaseReturn = new ArrayList<>();
+        try {
+            databaseReturn = connectionSettings.getSQL("SELECT ?,? FROM User;", columns);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String[] listItems = new String[databaseReturn.size()];
+        for (int i=0; i< databaseReturn.size();i++){
+            String addString = "";
+            for (String s : databaseReturn.get(i)){
+                addString += s;
+                while (addString.length() < 20){
+                    addString += " ";
+                }
+            }
+            listItems[i] = addString;
+        }
+        JList newList = new JList(listItems);
+        jList.setModel(newList.getModel());
+    }//GEN-LAST:event_jMenuItemTestSELECTActionPerformed
 
     /**
      * @param args the command line arguments
@@ -177,10 +224,13 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList jList;
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JMenuItem jMenuItemConnect;
     private javax.swing.JMenuItem jMenuItemDisconnect;
+    private javax.swing.JMenuItem jMenuItemTestSELECT;
     private javax.swing.JMenu jMenuServer;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 
     @Override
