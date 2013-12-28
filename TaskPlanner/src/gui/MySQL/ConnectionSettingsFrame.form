@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <NonVisualComponents>
+    <Component class="gui.MySQL.ConnectionSettingsPanel" name="connectionSettingsPanel1">
+    </Component>
+  </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
@@ -23,17 +27,17 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="connectionSettingsPanel1" min="-2" max="-2" attributes="0"/>
+          <Component id="connectionSettingsPanel" min="-2" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="connectionSettingsPanel1" min="-2" max="-2" attributes="0"/>
+          <Component id="connectionSettingsPanel" min="-2" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="gui.ConnectionSettingsPanel" name="connectionSettingsPanel1">
+    <Component class="gui.MySQL.ConnectionSettingsPanel" name="connectionSettingsPanel">
     </Component>
   </SubComponents>
 </Form>

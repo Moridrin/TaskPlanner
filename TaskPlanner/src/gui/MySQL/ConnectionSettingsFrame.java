@@ -1,7 +1,10 @@
 //<editor-fold defaultstate="collapsed" desc="Jibberish">
-package gui;
+package gui.MySQL;
 
+import gui.MainFrame;
 import java.util.ArrayList;
+import javax.swing.JFrame;
+import mysql.MySQL;
 //</editor-fold>
 
 /**
@@ -12,7 +15,6 @@ import java.util.ArrayList;
 public class ConnectionSettingsFrame extends javax.swing.JFrame {
 
     //<editor-fold defaultstate="collapsed" desc="Declarations">
-    //TODO
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Constructor">
@@ -23,7 +25,12 @@ public class ConnectionSettingsFrame extends javax.swing.JFrame {
     //</editor-fold>
 
     //<editor-fold desc="Functions">
-    //TODO
+    public void setObserver(MainFrame observer){
+        connectionSettingsPanel.setObserver(observer);
+    }
+    public MySQL getSettings(){
+        return connectionSettingsPanel.getSettings();
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Generated Code">
@@ -36,7 +43,7 @@ public class ConnectionSettingsFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        connectionSettingsPanel1 = new gui.ConnectionSettingsPanel();
+        connectionSettingsPanel = new gui.MySQL.ConnectionSettingsPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -44,11 +51,11 @@ public class ConnectionSettingsFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(connectionSettingsPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(connectionSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(connectionSettingsPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(connectionSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -90,7 +97,7 @@ public class ConnectionSettingsFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private gui.ConnectionSettingsPanel connectionSettingsPanel1;
+    private gui.MySQL.ConnectionSettingsPanel connectionSettingsPanel;
     // End of variables declaration//GEN-END:variables
     //</editor-fold>
 }
