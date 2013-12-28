@@ -1,6 +1,7 @@
 //<editor-fold defaultstate="collapsed" desc="Jibberish">
 package connections;
 
+import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -12,7 +13,7 @@ import java.util.logging.*;
  *
  * @author jeroen
  */
-public class MySQL{
+public class MySQL implements Serializable{
 
     //<editor-fold defaultstate="collapsed" desc="Declarations">
     private Connection con;
