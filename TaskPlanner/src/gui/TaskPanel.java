@@ -1,3 +1,4 @@
+//<editor-fold defaultstate="collapsed" desc="Jibberish">
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,20 +6,25 @@
  */
 
 package gui;
-
+//</editor-fold>
 /**
  *
  * @author jeroen
  */
 public class TaskPanel extends javax.swing.JPanel {
-
+    //<editor-fold defaultstate="collapsed" desc="Declarations">
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Constructor">
     /**
      * Creates new form TaskPanel
      */
     public TaskPanel() {
         initComponents();
     }
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Generated Code">
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -43,4 +49,5 @@ public class TaskPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+    //</editor-fold>
 }

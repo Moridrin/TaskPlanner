@@ -1,3 +1,4 @@
+//<editor-fold defaultstate="collapsed" desc="Jibberish">
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -16,16 +17,19 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.ListModel;
-
+//</editor-fold>
 /**
  *
  * @author jeroen
  */
 public class MainFrame extends javax.swing.JFrame implements ParentFormInterface {
 
+    //<editor-fold defaultstate="collapsed" desc="Declarations">
     private MySQL connectionSettings;
     ConnectionSettingsFrame connectionSettingsFrame;
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Constructor">
     /**
      * Creates new form MainFrame
      */
@@ -33,7 +37,10 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
         initComponents();
         loadSettings();
     }
+    //</editor-fold>
     
+    //<editor-fold desc="Functions">
+    //<editor-fold defaultstate="collapsed" desc="Load Settings">
     private void loadSettings(){
         File f = new File("ServerSettings.ser");
         if (f.exists()) {
@@ -53,7 +60,9 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
             }
         }
     }
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Update Settings">
     private void updateSettings(MySQL connectionSettings) {
         this.connectionSettings = connectionSettings;
         if (connectionSettingsFrame != null) {
@@ -78,7 +87,9 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
             jMenuItemDisconnect.setEnabled(false);
         }
     }
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Generated Code">
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -147,17 +158,23 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Menu Item Connect Click">
     private void jMenuItemConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConnectActionPerformed
         connectionSettingsFrame = new gui.mysql.ConnectionSettingsFrame();
         connectionSettingsFrame.setVisible(true);
         connectionSettingsFrame.setParent(this);
     }//GEN-LAST:event_jMenuItemConnectActionPerformed
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Menu Item Disconnect Click">
     private void jMenuItemDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDisconnectActionPerformed
         updateSettings(null);
     }//GEN-LAST:event_jMenuItemDisconnectActionPerformed
-
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Menu Item TestSELECT Click">
     private void jMenuItemTestSELECTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTestSELECTActionPerformed
         ArrayList<String> columns = new ArrayList<>();
         columns.add("UserName");
@@ -182,7 +199,9 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
         JList newList = new JList(listItems);
         jList.setModel(newList.getModel());
     }//GEN-LAST:event_jMenuItemTestSELECTActionPerformed
-
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Generated Code">
     /**
      * @param args the command line arguments
      */
@@ -232,7 +251,9 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     private javax.swing.JMenu jMenuServer;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
-
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Update (listener function)">
     @Override
     public void UpdateForm(String function, ArrayList<Object> args) {
         if (function.equals("updateSettings")) {
@@ -240,4 +261,6 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
             updateSettings(arg);
         }
     }
+    //</editor-fold>
+    //</editor-fold>
 }

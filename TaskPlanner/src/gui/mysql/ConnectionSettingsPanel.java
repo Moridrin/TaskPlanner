@@ -1,3 +1,4 @@
+//<editor-fold defaultstate="collapsed" desc="Jibberish">
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -16,31 +17,39 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import connections.MySQL;
 import forminterface.ParentFormInterface;
-
+//</editor-fold>
 /**
  *
  * @author jeroen
  */
 public class ConnectionSettingsPanel extends javax.swing.JPanel {
 
+    //<editor-fold defaultstate="collapsed" desc="Declarations">
     MySQL conn;
     ParentFormInterface parent;
-
+    
     public void setParent(ParentFormInterface parent) {
         this.parent = parent;
     }
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Constructor">
     /**
      * Creates new form ConnectionSettingsPanel
      */
     public ConnectionSettingsPanel() {
         initComponents();
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Functions">
+    //<editor-fold defaultstate="collapsed" desc="Get Settings">
     public MySQL getSettings() {
         return conn;
     }
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Generated Code">
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -156,7 +165,9 @@ public class ConnectionSettingsPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Button Connect Click">
     private void jButtonConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectActionPerformed
         // TODO add your handling code here:
         conn = new connections.MySQL(jTextFieldServer.getText(), Integer.parseInt(jTextFieldPort.getText()), jTextFieldDatabase.getText(), jTextFieldUsername.getText(), jTextFieldPassword.getText());
@@ -164,8 +175,10 @@ public class ConnectionSettingsPanel extends javax.swing.JPanel {
         args.add(conn);
         parent.UpdateForm("updateSettings", args);
     }//GEN-LAST:event_jButtonConnectActionPerformed
+    //</editor-fold>
+    //</editor-fold>
 
-
+    //<editor-fold defaultstate="collapsed" desc="Generated Code">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonConnect;
     private javax.swing.JFormattedTextField jFormattedTextField1;
@@ -180,4 +193,5 @@ public class ConnectionSettingsPanel extends javax.swing.JPanel {
     private javax.swing.JTextField jTextFieldServer;
     private javax.swing.JTextField jTextFieldUsername;
     // End of variables declaration//GEN-END:variables
+    //</editor-fold>
 }
