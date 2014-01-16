@@ -75,7 +75,7 @@ public class MySQL implements Serializable {
      * This sends an SELECT statement to the Database and returns whatever comes
      * back.
      *
-     * @param sql is the statement that will be send to the Database.
+     * @param sql is the statement that will be send to the Database. Use "?" for 
      * @param columns contains a lost with the names of the columns that you ask
      * for in the SQL Statement.
      * @throws SQLException it throws this exception instead of catching it
