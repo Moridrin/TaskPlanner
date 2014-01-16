@@ -17,6 +17,8 @@ import java.util.logging.Logger;
  */
 public class QuickAdd extends javax.swing.JPanel {
 
+    MySQL connectionSettings;
+    
     /**
      * Creates new form QuickAdd
      */
@@ -25,6 +27,7 @@ public class QuickAdd extends javax.swing.JPanel {
     }
 
     public void Initialize(MySQL connectionSettings) {
+	this.connectionSettings = connectionSettings;
 	ArrayList<String> columns = new ArrayList<>();
 	columns.add("TaskTypeName");
 	ArrayList<String[]> SQLReturn = new ArrayList<>();
@@ -76,6 +79,11 @@ public class QuickAdd extends javax.swing.JPanel {
         jLabelWithDesign = new javax.swing.JLabel();
 
         jButtonAdd.setText("Add");
+        jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddActionPerformed(evt);
+            }
+        });
 
         jLabelName.setText("Name");
 
@@ -153,6 +161,19 @@ public class QuickAdd extends javax.swing.JPanel {
     private void jComboBoxTaskTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxTaskTypeItemStateChanged
 	setFieldsVisibility();
     }//GEN-LAST:event_jComboBoxTaskTypeItemStateChanged
+
+    private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
+        // TODO add your handling code here:
+	ArrayList<String> columns = new ArrayList<>();
+	columns.add("");
+	ArrayList<String> values = new ArrayList<>();
+	values.add("");
+	try {
+	    connectionSettings.setInsertInto("ToDo", columns, values);
+	} catch (SQLException ex) {
+	    Logger.getLogger(QuickAdd.class.getName()).log(Level.SEVERE, null, ex);
+	}
+    }//GEN-LAST:event_jButtonAddActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

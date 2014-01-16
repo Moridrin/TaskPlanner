@@ -174,6 +174,7 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
         updateSettings(null);
     }//GEN-LAST:event_jMenuItemDisconnectActionPerformed
     //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="Form Window Opened">
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
 
