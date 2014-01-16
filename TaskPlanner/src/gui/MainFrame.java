@@ -36,6 +36,7 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     public MainFrame() {
         initComponents();
         loadSettings();
+	quickAdd.Initialize(connectionSettings);
     }
     //</editor-fold>
     
@@ -99,17 +100,22 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jList = new javax.swing.JList();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList();
+        quickAdd = new gui.QuickAdd();
         jMenuBar = new javax.swing.JMenuBar();
         jMenuServer = new javax.swing.JMenu();
         jMenuItemConnect = new javax.swing.JMenuItem();
         jMenuItemDisconnect = new javax.swing.JMenuItem();
-        jMenuItemTestSELECT = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
-        jScrollPane2.setViewportView(jList);
+        jScrollPane1.setViewportView(jList1);
 
         jMenuServer.setText("Server");
         jMenuServer.setToolTipText("");
@@ -131,14 +137,6 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
         });
         jMenuServer.add(jMenuItemDisconnect);
 
-        jMenuItemTestSELECT.setText("Test SELECT");
-        jMenuItemTestSELECT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemTestSELECTActionPerformed(evt);
-            }
-        });
-        jMenuServer.add(jMenuItemTestSELECT);
-
         jMenuBar.add(jMenuServer);
 
         setJMenuBar(jMenuBar);
@@ -147,13 +145,16 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(quickAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+            .addComponent(jScrollPane1)
+            .addComponent(quickAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -173,32 +174,10 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
         updateSettings(null);
     }//GEN-LAST:event_jMenuItemDisconnectActionPerformed
     //</editor-fold>
-    
-    //<editor-fold defaultstate="collapsed" desc="Menu Item TestSELECT Click">
-    private void jMenuItemTestSELECTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTestSELECTActionPerformed
-        ArrayList<String> columns = new ArrayList<>();
-        columns.add("UserName");
-        columns.add("UserEmail");
-        ArrayList<String[]> databaseReturn = new ArrayList<>();
-        try {
-            databaseReturn = connectionSettings.getSQL("SELECT ?,? FROM User;", columns);
-        } catch (SQLException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        String[] listItems = new String[databaseReturn.size()];
-        for (int i=0; i< databaseReturn.size();i++){
-            String addString = "";
-            for (String s : databaseReturn.get(i)){
-                addString += s;
-                while (addString.length() < 20){
-                    addString += " ";
-                }
-            }
-            listItems[i] = addString;
-        }
-        JList newList = new JList(listItems);
-        jList.setModel(newList.getModel());
-    }//GEN-LAST:event_jMenuItemTestSELECTActionPerformed
+    //<editor-fold defaultstate="collapsed" desc="Form Window Opened">
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+
+    }//GEN-LAST:event_formWindowOpened
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Generated Code">
@@ -243,13 +222,13 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList jList;
+    private javax.swing.JList jList1;
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JMenuItem jMenuItemConnect;
     private javax.swing.JMenuItem jMenuItemDisconnect;
-    private javax.swing.JMenuItem jMenuItemTestSELECT;
     private javax.swing.JMenu jMenuServer;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private gui.QuickAdd quickAdd;
     // End of variables declaration//GEN-END:variables
     //</editor-fold>
     
