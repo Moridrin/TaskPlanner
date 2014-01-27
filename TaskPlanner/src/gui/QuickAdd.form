@@ -29,10 +29,8 @@
                       <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                              <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jFormattedTextFieldToDoBefore" min="-2" pref="200" max="-2" attributes="0"/>
-                                  <Component id="jComboBoxTaskType" min="-2" pref="200" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jFormattedTextFieldToDoBefore" min="-2" pref="200" max="-2" attributes="0"/>
+                              <Component id="jComboBoxTaskType" min="-2" pref="200" max="-2" attributes="0"/>
                               <Component id="jButtonAdd" alignment="1" min="-2" max="-2" attributes="0"/>
                               <Component id="jSliderPriority" alignment="1" min="-2" pref="200" max="-2" attributes="0"/>
                           </Group>
@@ -112,6 +110,10 @@
           <Format format="yy/M/d" subtype="-1" type="1"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jFormattedTextFieldToDoBeforeFocusGained"/>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jFormattedTextFieldToDoBeforeFocusLost"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabelToDoBefore">
       <Properties>

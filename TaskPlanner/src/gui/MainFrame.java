@@ -18,6 +18,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.ListModel;
 //</editor-fold>
+
 /**
  *
  * @author jeroen
@@ -27,6 +28,7 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     //<editor-fold defaultstate="collapsed" desc="Declarations">
     private MySQL connectionSettings;
     ConnectionSettingsFrame connectionSettingsFrame;
+    private DefaultListModel listModel;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Constructor">
@@ -36,19 +38,19 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     public MainFrame() {
         initComponents();
         loadSettings();
-	quickAdd.Initialize(connectionSettings);
     }
     //</editor-fold>
-    
+
     //<editor-fold desc="Functions">
     //<editor-fold defaultstate="collapsed" desc="Load Settings">
-    private void loadSettings(){
+    private void loadSettings() {
         File f = new File("ServerSettings.ser");
         if (f.exists()) {
             try {
                 FileInputStream file = new FileInputStream("ServerSettings.ser");
                 ObjectInputStream stream = new ObjectInputStream(file);
                 connectionSettings = (MySQL) stream.readObject();
+                updateSettings(connectionSettings);
                 stream.close();
                 file.close();
                 jMenuItemConnect.setEnabled(false);
@@ -56,9 +58,11 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
             } catch (IOException exception) {
                 exception.printStackTrace();
             } catch (ClassNotFoundException exception) {
-                System.out.println("Employee class not found");
+                System.out.println("Class not found");
                 exception.printStackTrace();
             }
+        } else {
+            updateSettings(null);
         }
     }
     //</editor-fold>
@@ -81,12 +85,39 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
             }
             jMenuItemConnect.setEnabled(false);
             jMenuItemDisconnect.setEnabled(true);
+            quickAdd.Initialize(connectionSettings);
+            quickAdd.setVisible(true);
+            FillToDoList();
+            jListToDo.setVisible(true);
         } else {
+            quickAdd.setVisible(false);
+            jListToDo.setVisible(false);
             File file = new File("ServerSettings.ser");
             file.delete();
             jMenuItemConnect.setEnabled(true);
             jMenuItemDisconnect.setEnabled(false);
         }
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Update Settings">
+    private void FillToDoList() {
+        ArrayList<String[]> tasks = null;
+        try {
+            ArrayList<String> columns = new ArrayList<String>();
+            columns.add("ToDoName");
+            columns.add("ToDoBefore");
+            columns.add("ToDoPriority");
+            tasks = connectionSettings.getSQL("SELECT ?, ?, ? FROM ToDo;", columns);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        listModel = new DefaultListModel();
+        listModel.addElement("Name\tBefore\tPriority");
+        for (String[] s : tasks) {
+            listModel.addElement(s[0] + "\t" + s[1] + "\t" + s[2]);
+        }
+        jListToDo.setModel(listModel);
     }
     //</editor-fold>
 
@@ -101,7 +132,7 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        jListToDo = new javax.swing.JList();
         quickAdd = new gui.QuickAdd();
         jMenuBar = new javax.swing.JMenuBar();
         jMenuServer = new javax.swing.JMenu();
@@ -115,7 +146,7 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
             }
         });
 
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(jListToDo);
 
         jMenuServer.setText("Server");
         jMenuServer.setToolTipText("");
@@ -160,7 +191,7 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
         pack();
     }// </editor-fold>//GEN-END:initComponents
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="Menu Item Connect Click">
     private void jMenuItemConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConnectActionPerformed
         connectionSettingsFrame = new gui.mysql.ConnectionSettingsFrame();
@@ -174,13 +205,13 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
         updateSettings(null);
     }//GEN-LAST:event_jMenuItemDisconnectActionPerformed
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="Form Window Opened">
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
 
     }//GEN-LAST:event_formWindowOpened
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="Generated Code">
     /**
      * @param args the command line arguments
@@ -223,7 +254,7 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList jList1;
+    private javax.swing.JList jListToDo;
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JMenuItem jMenuItemConnect;
     private javax.swing.JMenuItem jMenuItemDisconnect;
@@ -232,7 +263,7 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     private gui.QuickAdd quickAdd;
     // End of variables declaration//GEN-END:variables
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="Update (listener function)">
     @Override
     public void UpdateForm(String function, ArrayList<Object> args) {
