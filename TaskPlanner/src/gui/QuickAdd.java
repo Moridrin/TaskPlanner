@@ -6,10 +6,10 @@
 package gui;
 
 import connections.MySQL;
+import forminterface.ParentFormInterface;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +21,11 @@ import java.util.logging.Logger;
 public class QuickAdd extends javax.swing.JPanel {
 
     MySQL connectionSettings;
+    ParentFormInterface parent;
+
+    public void setParent(ParentFormInterface parent) {
+        this.parent = parent;
+    }
 
     /**
      * Creates new form QuickAdd
@@ -29,7 +34,8 @@ public class QuickAdd extends javax.swing.JPanel {
         initComponents();
     }
 
-    public void Initialize(MySQL connectionSettings) {
+    public void Initialize(MySQL connectionSettings, ParentFormInterface parent) {
+        setParent(parent);
         if (connectionSettings != null) {
             this.connectionSettings = connectionSettings;
             ArrayList<String> columns = new ArrayList<>();
@@ -194,6 +200,7 @@ public class QuickAdd extends javax.swing.JPanel {
         } catch (SQLException ex) {
             Logger.getLogger(QuickAdd.class.getName()).log(Level.SEVERE, null, ex);
         }
+        parent.UpdateForm("FillToDoList", null);
     }//GEN-LAST:event_jButtonAddActionPerformed
 
     private void jFormattedTextFieldToDoBeforeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFormattedTextFieldToDoBeforeFocusGained

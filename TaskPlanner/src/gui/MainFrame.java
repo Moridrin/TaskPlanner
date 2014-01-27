@@ -16,7 +16,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import javax.swing.JTable;
 import javax.swing.ListModel;
+import javax.swing.table.DefaultTableModel;
 //</editor-fold>
 
 /**
@@ -28,7 +30,7 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     //<editor-fold defaultstate="collapsed" desc="Declarations">
     private MySQL connectionSettings;
     ConnectionSettingsFrame connectionSettingsFrame;
-    private DefaultListModel listModel;
+    private DefaultTableModel tableModel;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Constructor">
@@ -85,13 +87,13 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
             }
             jMenuItemConnect.setEnabled(false);
             jMenuItemDisconnect.setEnabled(true);
-            quickAdd.Initialize(connectionSettings);
+            quickAdd.Initialize(connectionSettings, this);
             quickAdd.setVisible(true);
             FillToDoList();
-            jListToDo.setVisible(true);
+            jTableToDo.setVisible(true);
         } else {
             quickAdd.setVisible(false);
-            jListToDo.setVisible(false);
+            jTableToDo.setVisible(false);
             File file = new File("ServerSettings.ser");
             file.delete();
             jMenuItemConnect.setEnabled(true);
@@ -112,12 +114,14 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
         } catch (SQLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        listModel = new DefaultListModel();
-        listModel.addElement("Name\tBefore\tPriority");
+        tableModel = new DefaultTableModel();
+        tableModel.addColumn("Name");
+        tableModel.addColumn("Before");
+        tableModel.addColumn("Priority");
         for (String[] s : tasks) {
-            listModel.addElement(s[0] + "\t" + s[1] + "\t" + s[2]);
+            tableModel.addRow(s);
         }
-        jListToDo.setModel(listModel);
+        jTableToDo.setModel(tableModel);
     }
     //</editor-fold>
 
@@ -131,9 +135,9 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jListToDo = new javax.swing.JList();
         quickAdd = new gui.QuickAdd();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableToDo = new javax.swing.JTable();
         jMenuBar = new javax.swing.JMenuBar();
         jMenuServer = new javax.swing.JMenu();
         jMenuItemConnect = new javax.swing.JMenuItem();
@@ -146,7 +150,18 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
             }
         });
 
-        jScrollPane1.setViewportView(jListToDo);
+        jTableToDo.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Name", "Before", "Priority"
+            }
+        ));
+        jTableToDo.setToolTipText("");
+        jTableToDo.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
+        jTableToDo.setFillsViewportHeight(true);
+        jScrollPane2.setViewportView(jTableToDo);
 
         jMenuServer.setText("Server");
         jMenuServer.setToolTipText("");
@@ -178,14 +193,17 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(quickAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
-            .addComponent(quickAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(quickAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
@@ -254,12 +272,12 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList jListToDo;
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JMenuItem jMenuItemConnect;
     private javax.swing.JMenuItem jMenuItemDisconnect;
     private javax.swing.JMenu jMenuServer;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTableToDo;
     private gui.QuickAdd quickAdd;
     // End of variables declaration//GEN-END:variables
     //</editor-fold>
@@ -270,6 +288,9 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
         if (function.equals("updateSettings")) {
             MySQL arg = (MySQL) args.get(0);
             updateSettings(arg);
+        }
+        else if (function.equals("FillToDoList")){
+            FillToDoList();
         }
     }
     //</editor-fold>
