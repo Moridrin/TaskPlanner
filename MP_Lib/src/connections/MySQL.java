@@ -42,7 +42,7 @@ public class MySQL implements Serializable {
     //</editor-fold>
 
     //<editor-fold desc="Functions">
-    //<editor-fold defaultstate="collapsed" desc="Set SQL">
+    //<editor-fold defaultstate="collapsed" desc="Set InsertInto SQL">
     /**
      * In this method the statement will be executed on the server.
      *
@@ -58,7 +58,7 @@ public class MySQL implements Serializable {
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("INSERT INTO " + table + " (");
         for (int i = 0; i < columns.size(); i++) {
-            if (i == columns.size()-1) {
+            if (i == columns.size() - 1) {
                 sqlBuilder.append(columns.get(i));
             } else {
                 sqlBuilder.append(columns.get(i));
@@ -80,6 +80,110 @@ public class MySQL implements Serializable {
         pst = con.prepareStatement(sql);
         for (int i = 0; i < values.size(); i++) {
             pst.setString(parameterIndex, values.get(i));
+            parameterIndex++;
+        }
+        try {
+            pst.executeUpdate();
+            if (con != null) {
+                con.close();
+            }
+        } catch (SQLException ex) {
+            Logger lgr = Logger.getLogger(MySQL.class.getName());
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        }
+    }
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Set Delete SQL">
+    /**
+     * In this method the statement will be executed on the server.
+     *
+     * @param table
+     * @param columns
+     * @param values
+     *
+     * @throws SQLException it throws this exception instead of catching it
+     * here, so that the class calling this function knows what the problem is.
+     */
+    public void setDelete(String table, ArrayList<String> columns, ArrayList<String> values) throws SQLException {
+        int parameterIndex = 1;
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("DELETE FROM " + table + " WHERE ");
+        for (int i = 0; i < columns.size(); i++) {
+            if (i == columns.size() - 1) {
+                sqlBuilder.append(table + columns.get(i));
+                sqlBuilder.append(" = ?");
+            } else {
+                sqlBuilder.append(columns.get(i));
+                sqlBuilder.append(" = ?, ");
+            }
+        }
+        sqlBuilder.append(";");
+        String sql = sqlBuilder.toString();
+        PreparedStatement pst = null;
+        con = DriverManager.getConnection(url, user, password);
+        pst = con.prepareStatement(sql);
+        for (int i = 0; i < values.size(); i++) {
+            pst.setString(parameterIndex, values.get(i));
+            parameterIndex++;
+        }
+        try {
+            pst.executeUpdate();
+            if (con != null) {
+                con.close();
+            }
+        } catch (SQLException ex) {
+            Logger lgr = Logger.getLogger(MySQL.class.getName());
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        }
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Set Update SQL (NOT TESTED)">
+    /**
+     * In this method the statement will be executed on the server.
+     *
+     * @param table
+     * @param columns
+     * @param oldValues
+     *
+     * @throws SQLException it throws this exception instead of catching it
+     * here, so that the class calling this function knows what the problem is.
+     */
+    public void setUpdate(String table, ArrayList<String> columns, ArrayList<String> oldValues, ArrayList<String> newValues) throws SQLException {
+        int parameterIndex = 1;
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("UPDATE " + table + " SET ");
+        for (int i = 0; i < columns.size(); i++) {
+            sqlBuilder.append(columns.get(i));
+            sqlBuilder.append(" = ");
+            if (i == newValues.size()) {
+                sqlBuilder.append("?");
+            } else {
+                sqlBuilder.append("?, ");
+            }
+        }
+        sqlBuilder.append(" WHERE (");
+        for (int i = 0; i < columns.size(); i++) {
+            sqlBuilder.append(columns.get(i));
+            sqlBuilder.append(" = ");
+            if (i == oldValues.size()) {
+                sqlBuilder.append("?");
+            } else {
+                sqlBuilder.append("?, ");
+            }
+        }
+        sqlBuilder.append(");");
+        String sql = sqlBuilder.toString();
+        PreparedStatement pst = null;
+        con = DriverManager.getConnection(url, user, password);
+        pst = con.prepareStatement(sql);
+        for (int i = 0; i < oldValues.size(); i++) {
+            pst.setString(parameterIndex, oldValues.get(i));
+            parameterIndex++;
+        }
+        for (int i = 0; i < newValues.size(); i++) {
+            pst.setString(parameterIndex, newValues.get(i));
             parameterIndex++;
         }
         try {
