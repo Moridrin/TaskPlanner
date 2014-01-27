@@ -50,6 +50,7 @@ public class QuickAdd extends javax.swing.JPanel {
             for (String[] entry : SQLReturn) {
                 jComboBoxTaskType.addItem(entry[0]);
             }
+            jComboBoxTaskType.setSelectedIndex(0);
             setFieldsVisibility();
         }
     }
@@ -178,7 +179,9 @@ public class QuickAdd extends javax.swing.JPanel {
 
     private void jComboBoxTaskTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxTaskTypeItemStateChanged
         jFormattedTextFieldToDoBefore.setText(currentDate());
-        setFieldsVisibility();
+        if (jComboBoxTaskType.getSelectedItem() != null) {
+            setFieldsVisibility();
+        }
     }//GEN-LAST:event_jComboBoxTaskTypeItemStateChanged
 
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed

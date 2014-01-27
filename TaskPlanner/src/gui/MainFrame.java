@@ -31,6 +31,7 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     private MySQL connectionSettings;
     ConnectionSettingsFrame connectionSettingsFrame;
     private DefaultTableModel tableModel;
+    int prevSelectedIndex;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Constructor">
@@ -121,6 +122,12 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
         for (String[] s : tasks) {
             tableModel.addRow(s);
         }
+        jTableToDo = new JTable() {
+            @Override
+            public boolean isCellEditable(int rowIndex, int colIndex) {
+                return false;
+            }
+        };
         jTableToDo.setModel(tableModel);
     }
     //</editor-fold>
@@ -161,6 +168,11 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
         jTableToDo.setToolTipText("");
         jTableToDo.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         jTableToDo.setFillsViewportHeight(true);
+        jTableToDo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableToDoMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTableToDo);
 
         jMenuServer.setText("Server");
@@ -194,8 +206,8 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(quickAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -203,7 +215,7 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(quickAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGap(0, 0, 0))
         );
 
         pack();
@@ -228,6 +240,26 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
 
     }//GEN-LAST:event_formWindowOpened
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Table Clicked">
+    private void jTableToDoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableToDoMouseClicked
+        int selectedIndex = jTableToDo.getSelectedRow();
+        if (prevSelectedIndex == selectedIndex) {
+            ArrayList<String> columns = new ArrayList<>();
+            columns.add("Name");
+            ArrayList<String> values = new ArrayList<>();
+            values.add((String) tableModel.getValueAt(selectedIndex, 0));
+            try {
+                connectionSettings.setDelete("ToDo", columns, values);
+            } catch (SQLException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            FillToDoList();
+        } else {
+            prevSelectedIndex = jTableToDo.getSelectedRow();
+        }
+    }//GEN-LAST:event_jTableToDoMouseClicked
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Generated Code">
@@ -288,8 +320,7 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
         if (function.equals("updateSettings")) {
             MySQL arg = (MySQL) args.get(0);
             updateSettings(arg);
-        }
-        else if (function.equals("FillToDoList")){
+        } else if (function.equals("FillToDoList")) {
             FillToDoList();
         }
     }
