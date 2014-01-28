@@ -1,9 +1,6 @@
 //<editor-fold defaultstate="collapsed" desc="Jibberish">
 package gui.mysql;
 
-import gui.MainFrame;
-import java.util.ArrayList;
-import javax.swing.JFrame;
 import connections.MySQL;
 import forminterface.ParentFormInterface;
 //</editor-fold>
@@ -91,13 +88,7 @@ public class ConnectionSettingsFrame extends javax.swing.JFrame {
 		    break;
 		}
 	    }
-	} catch (ClassNotFoundException ex) {
-	    java.util.logging.Logger.getLogger(ConnectionSettingsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-	} catch (InstantiationException ex) {
-	    java.util.logging.Logger.getLogger(ConnectionSettingsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-	} catch (IllegalAccessException ex) {
-	    java.util.logging.Logger.getLogger(ConnectionSettingsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-	} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+	} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
 	    java.util.logging.Logger.getLogger(ConnectionSettingsFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 	}
         //</editor-fold>
@@ -106,6 +97,7 @@ public class ConnectionSettingsFrame extends javax.swing.JFrame {
 	 * Create and display the form
 	 */
 	java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
 	    public void run() {
 		new ConnectionSettingsFrame().setVisible(true);
 	    }

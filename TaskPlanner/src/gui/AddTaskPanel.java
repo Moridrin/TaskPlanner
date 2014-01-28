@@ -12,7 +12,6 @@ import exceptions.UnsupportedType;
 import forminterface.ParentFormInterface;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
@@ -44,7 +43,7 @@ public class AddTaskPanel extends javax.swing.JPanel {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Functions">
+    //<editor-fold desc="Methodes">
     //<editor-fold defaultstate="collapsed" desc="Initialize">
     public void Initialize(MySQL connectionSettings, ParentFormInterface parent) {
         setParent(parent);
@@ -87,6 +86,7 @@ public class AddTaskPanel extends javax.swing.JPanel {
                 jSliderPriority.setVisible(true);
         }
     }
+    //</editor-fold>
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Generated Code">
@@ -197,6 +197,7 @@ public class AddTaskPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
     //</editor-fold>
 
+    //<editor-fold desc="Events">
     //<editor-fold defaultstate="collapsed" desc="ComboBox Item Changed">
     private void jComboBoxTaskTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxTaskTypeItemStateChanged
         jFormattedTextFieldToDoBefore.setText(Convert.toString(new Date()));
@@ -240,6 +241,7 @@ public class AddTaskPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jFormattedTextFieldToDoBeforeFocusLost
     //</editor-fold>
+    //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Generated Code">
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -253,6 +255,5 @@ public class AddTaskPanel extends javax.swing.JPanel {
     private javax.swing.JSlider jSliderPriority;
     private javax.swing.JTextField jTextFieldName;
     // End of variables declaration//GEN-END:variables
-    //</editor-fold>
     //</editor-fold>
 }

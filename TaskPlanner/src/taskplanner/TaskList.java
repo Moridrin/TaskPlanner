@@ -5,7 +5,6 @@
  * and open the template in the editor.
  */
 package taskplanner;
-//</editor-fold>
 
 import Calculations.Convert;
 import connections.MySQL;
@@ -16,6 +15,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+//</editor-fold>
 
 /**
  *
@@ -25,6 +25,7 @@ public class TaskList {
 
     //<editor-fold defaultstate="collapsed" desc="Declarations">
     private final ArrayList<Task> tasks;
+    //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Constructor">
     public TaskList(ArrayList<Task> tasks) {
@@ -65,6 +66,5 @@ public class TaskList {
         }
     }
     //</editor-fold>
-
     //</editor-fold>
 }

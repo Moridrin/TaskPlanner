@@ -1,3 +1,4 @@
+//<editor-fold defaultstate="collapsed" desc="Jibberish">
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,6 +9,7 @@ package Calculations;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+//</editor-fold>
 
 /**
  *

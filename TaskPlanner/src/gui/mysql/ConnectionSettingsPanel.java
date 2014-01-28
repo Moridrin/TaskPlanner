@@ -6,18 +6,11 @@
  */
 package gui.mysql;
 
-import gui.MainFrame;
-import java.awt.Window;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 import connections.MySQL;
 import forminterface.ParentFormInterface;
 //</editor-fold>
+
 /**
  *
  * @author jeroen
@@ -27,9 +20,13 @@ public class ConnectionSettingsPanel extends javax.swing.JPanel {
     //<editor-fold defaultstate="collapsed" desc="Declarations">
     MySQL conn;
     ParentFormInterface parent;
-    
+
     public void setParent(ParentFormInterface parent) {
         this.parent = parent;
+    }
+
+    public MySQL getSettings() {
+        return conn;
     }
     //</editor-fold>
 
@@ -39,13 +36,6 @@ public class ConnectionSettingsPanel extends javax.swing.JPanel {
      */
     public ConnectionSettingsPanel() {
         initComponents();
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="Functions">
-    //<editor-fold defaultstate="collapsed" desc="Get Settings">
-    public MySQL getSettings() {
-        return conn;
     }
     //</editor-fold>
 
@@ -166,7 +156,8 @@ public class ConnectionSettingsPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
     //</editor-fold>
-    
+
+    //<editor-fold desc="Events">
     //<editor-fold defaultstate="collapsed" desc="Button Connect Click">
     private void jButtonConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectActionPerformed
         // TODO add your handling code here:

@@ -6,8 +6,6 @@
  */
 
 package forminterface;
-
-import java.util.ArrayList;
 //</editor-fold>
 /**
  *

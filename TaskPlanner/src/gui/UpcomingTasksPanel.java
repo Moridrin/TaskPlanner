@@ -1,10 +1,11 @@
+//<editor-fold defaultstate="collapsed" desc="Jibberish">
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package gui;
+//</editor-fold>
 
 /**
  *
@@ -12,13 +13,19 @@ package gui;
  */
 public class UpcomingTasksPanel extends javax.swing.JPanel {
 
+    //<editor-fold defaultstate="collapsed" desc="Declarations">
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Constructor">
     /**
      * Creates new form UpcomingTasksPanel
      */
     public UpcomingTasksPanel() {
         initComponents();
     }
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Generated Code">
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -65,4 +72,5 @@ public class UpcomingTasksPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTableToDo;
     // End of variables declaration//GEN-END:variables
+    //</editor-fold>
 }

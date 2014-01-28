@@ -19,14 +19,19 @@ import java.util.logging.Logger;
 public class Task {
 
     //<editor-fold defaultstate="collapsed" desc="Declarations">
-    private String name;
-    private Date beforeDate;
-    private int priority;
+    private final String name;
+    private final Date beforeDate;
+    private final int priority;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Constructor">
     /**
-     * In this class //TODO
+     * In this constructor Task will initialize all the given parameters.
+     *
+     * @param name is the name of the Task
+     * @param beforeDate is the Date before which the task needs to be
+     * complected
+     * @param priority is the priority of the task (higher is more important)
      */
     public Task(String name, Date beforeDate, int priority) {
         this.name = name;
@@ -36,6 +41,7 @@ public class Task {
     //</editor-fold>
 
     //<editor-fold desc="Functions">
+    //<editor-fold defaultstate="collapsed" desc="Save">
     public void Save(MySQL connectionSettings) {
         String sql = "INSERT INTO ToDo (ToDoName, ToDoBefore, ToDoPriority) VALUES (?, ?, ?);";
         ArrayList<Object> parameters = new ArrayList<>();
@@ -50,5 +56,6 @@ public class Task {
             Logger.getLogger(Task.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    //</editor-fold>
     //</editor-fold>
 }
