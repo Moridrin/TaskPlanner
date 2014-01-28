@@ -14,5 +14,5 @@ import java.util.ArrayList;
  * @author jeroen
  */
 public interface ParentFormInterface {
-    public void UpdateForm(String function, ArrayList<Object> args);
+    public void UpdateForm(String function, Object args);
 }

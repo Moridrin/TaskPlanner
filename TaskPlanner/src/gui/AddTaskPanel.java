@@ -1,3 +1,4 @@
+//<editor-fold defaultstate="collapsed" desc="Jibberish">
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,46 +6,60 @@
  */
 package gui;
 
+import Calculations.Convert;
 import connections.MySQL;
+import exceptions.UnsupportedType;
 import forminterface.ParentFormInterface;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import taskplanner.Task;
+//</editor-fold>
 
 /**
  *
  * @author jeroen
  */
-public class QuickAdd extends javax.swing.JPanel {
+public class AddTaskPanel extends javax.swing.JPanel {
 
+    //<editor-fold defaultstate="collapsed" desc="Declarations">
     MySQL connectionSettings;
     ParentFormInterface parent;
 
     public void setParent(ParentFormInterface parent) {
         this.parent = parent;
     }
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Constructor">
     /**
      * Creates new form QuickAdd
      */
-    public QuickAdd() {
+    public AddTaskPanel() {
         initComponents();
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Functions">
+    //<editor-fold defaultstate="collapsed" desc="Initialize">
     public void Initialize(MySQL connectionSettings, ParentFormInterface parent) {
         setParent(parent);
         if (connectionSettings != null) {
             this.connectionSettings = connectionSettings;
             ArrayList<String> columns = new ArrayList<>();
             columns.add("TaskTypeName");
+            ArrayList<Object> parameters = new ArrayList<>();
             ArrayList<String[]> SQLReturn = new ArrayList<>();
             try {
-                SQLReturn = connectionSettings.getSQL("SELECT ? FROM TaskType", columns);
+                SQLReturn = connectionSettings.executeSQL("SELECT * FROM TaskType", columns, parameters);
             } catch (SQLException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedType ex) {
+                Logger.getLogger(AddTaskPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
             jComboBoxTaskType.removeAllItems();
             for (String[] entry : SQLReturn) {
@@ -54,7 +69,9 @@ public class QuickAdd extends javax.swing.JPanel {
             setFieldsVisibility();
         }
     }
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Set Fields Visible">
     private void setFieldsVisibility() {
         switch (jComboBoxTaskType.getSelectedItem().toString()) {
             case "[SELECT]":
@@ -70,7 +87,9 @@ public class QuickAdd extends javax.swing.JPanel {
                 jSliderPriority.setVisible(true);
         }
     }
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Generated Code">
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -173,58 +192,56 @@ public class QuickAdd extends javax.swing.JPanel {
                         .addComponent(jSliderPriority, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonAdd)))
-                .addContainerGap(214, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="ComboBox Item Changed">
     private void jComboBoxTaskTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxTaskTypeItemStateChanged
-        jFormattedTextFieldToDoBefore.setText(currentDate());
+        jFormattedTextFieldToDoBefore.setText(Convert.toString(new Date()));
         if (jComboBoxTaskType.getSelectedItem() != null) {
             setFieldsVisibility();
         }
     }//GEN-LAST:event_jComboBoxTaskTypeItemStateChanged
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="AddButton Action">
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
-        // TODO add your handling code here:
-        ArrayList<String> columns = new ArrayList<>();
-        columns.add("ToDoName");
-        columns.add("ToDoBefore");
-        columns.add("ToDoPriority");
-        ArrayList<String> values = new ArrayList<>();
-        values.add(jTextFieldName.getText());
-        values.add(jFormattedTextFieldToDoBefore.getText());
-        values.add(String.valueOf(jSliderPriority.getValue()));
+        String name = jTextFieldName.getText();
+        Date beforeDate = null;
         try {
-            connectionSettings.setInsertInto("ToDo", columns, values);
-            jTextFieldName.setText("");
-            jFormattedTextFieldToDoBefore.setText("");
-            jSliderPriority.setValue(3);
-            jComboBoxTaskType.setSelectedIndex(0);
-        } catch (SQLException ex) {
-            Logger.getLogger(QuickAdd.class.getName()).log(Level.SEVERE, null, ex);
+            beforeDate = Convert.toDate(jFormattedTextFieldToDoBefore.getText());
+        } catch (ParseException ex) {
+            Logger.getLogger(AddTaskPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        parent.UpdateForm("FillToDoList", null);
+        int priority = jSliderPriority.getValue();
+        Task t = new Task(name, beforeDate, priority);
+        t.Save(connectionSettings);
+        jTextFieldName.setText("");
+        jSliderPriority.setValue(3);
+        ArrayList<Object> args = new ArrayList<>();
+        args.add(t);
+        parent.UpdateForm("AddTask", args);
     }//GEN-LAST:event_jButtonAddActionPerformed
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="BeforeDate TextField Focus Gained">
     private void jFormattedTextFieldToDoBeforeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFormattedTextFieldToDoBeforeFocusGained
         jFormattedTextFieldToDoBefore.setText("");
     }//GEN-LAST:event_jFormattedTextFieldToDoBeforeFocusGained
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="BeforeDate TextField Focus Lost">
     private void jFormattedTextFieldToDoBeforeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFormattedTextFieldToDoBeforeFocusLost
         // TODO add your handling code here:
         if (jFormattedTextFieldToDoBefore.getText().equals("")) {
-            jFormattedTextFieldToDoBefore.setText(currentDate());
+            jFormattedTextFieldToDoBefore.setText(Convert.toString(new Date()));
         }
     }//GEN-LAST:event_jFormattedTextFieldToDoBeforeFocusLost
+    //</editor-fold>
 
-    private String currentDate() {
-        String returner;
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd");
-        returner = sdf.format(date);
-        return returner;
-    }
-
+    //<editor-fold defaultstate="collapsed" desc="Generated Code">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAdd;
     private javax.swing.JComboBox jComboBoxTaskType;
@@ -236,4 +253,6 @@ public class QuickAdd extends javax.swing.JPanel {
     private javax.swing.JSlider jSliderPriority;
     private javax.swing.JTextField jTextFieldName;
     // End of variables declaration//GEN-END:variables
+    //</editor-fold>
+    //</editor-fold>
 }

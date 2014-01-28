@@ -7,18 +7,11 @@
 package gui;
 
 import java.io.*;
-import java.util.*;
 import connections.MySQL;
 import forminterface.ParentFormInterface;
 import gui.mysql.ConnectionSettingsFrame;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
-import javax.swing.JTable;
-import javax.swing.ListModel;
 import javax.swing.table.DefaultTableModel;
+import taskplanner.*;
 //</editor-fold>
 
 /**
@@ -32,6 +25,7 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     ConnectionSettingsFrame connectionSettingsFrame;
     private DefaultTableModel tableModel;
     int prevSelectedIndex;
+    TaskList taskList;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Constructor">
@@ -41,10 +35,11 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     public MainFrame() {
         initComponents();
         loadSettings();
+        taskList = new TaskList(null);
     }
     //</editor-fold>
 
-    //<editor-fold desc="Functions">
+    //<editor-fold desc="Methodes">
     //<editor-fold defaultstate="collapsed" desc="Load Settings">
     private void loadSettings() {
         File f = new File("ServerSettings.ser");
@@ -59,10 +54,8 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
                 jMenuItemConnect.setEnabled(false);
                 jMenuItemDisconnect.setEnabled(true);
             } catch (IOException exception) {
-                exception.printStackTrace();
             } catch (ClassNotFoundException exception) {
                 System.out.println("Class not found");
-                exception.printStackTrace();
             }
         } else {
             updateSettings(null);
@@ -84,17 +77,10 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
                 out.close();
                 fileOut.close();
             } catch (IOException i) {
-                i.printStackTrace();
             }
             jMenuItemConnect.setEnabled(false);
             jMenuItemDisconnect.setEnabled(true);
-            quickAdd.Initialize(connectionSettings, this);
-            quickAdd.setVisible(true);
-            FillToDoList();
-            jTableToDo.setVisible(true);
         } else {
-            quickAdd.setVisible(false);
-            jTableToDo.setVisible(false);
             File file = new File("ServerSettings.ser");
             file.delete();
             jMenuItemConnect.setEnabled(true);
@@ -102,34 +88,12 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
         }
     }
     //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Update Settings">
-    private void FillToDoList() {
-        ArrayList<String[]> tasks = null;
-        try {
-            ArrayList<String> columns = new ArrayList<String>();
-            columns.add("ToDoName");
-            columns.add("ToDoBefore");
-            columns.add("ToDoPriority");
-            tasks = connectionSettings.getSQL("SELECT ?, ?, ? FROM ToDo;", columns);
-        } catch (SQLException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        tableModel = new DefaultTableModel();
-        tableModel.addColumn("Name");
-        tableModel.addColumn("Before");
-        tableModel.addColumn("Priority");
-        for (String[] s : tasks) {
-            tableModel.addRow(s);
-        }
-        jTableToDo = new JTable() {
-            @Override
-            public boolean isCellEditable(int rowIndex, int colIndex) {
-                return false;
-            }
-        };
-        jTableToDo.setModel(tableModel);
+    
+    //<editor-fold defaultstate="collapsed" desc="AddTask">
+    private void AddTask(Task t){
+        
     }
+    //</editor-fold>
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Generated Code">
@@ -142,13 +106,13 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        quickAdd = new gui.QuickAdd();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTableToDo = new javax.swing.JTable();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuBar = new javax.swing.JMenuBar();
         jMenuServer = new javax.swing.JMenu();
         jMenuItemConnect = new javax.swing.JMenuItem();
         jMenuItemDisconnect = new javax.swing.JMenuItem();
+
+        jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -156,24 +120,6 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
                 formWindowOpened(evt);
             }
         });
-
-        jTableToDo.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Name", "Before", "Priority"
-            }
-        ));
-        jTableToDo.setToolTipText("");
-        jTableToDo.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
-        jTableToDo.setFillsViewportHeight(true);
-        jTableToDo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTableToDoMouseClicked(evt);
-            }
-        });
-        jScrollPane2.setViewportView(jTableToDo);
 
         jMenuServer.setText("Server");
         jMenuServer.setToolTipText("");
@@ -203,25 +149,18 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(quickAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+            .addGap(0, 399, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(quickAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+            .addGap(0, 226, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     //</editor-fold>
 
+    //<editor-fold desc="Events">
     //<editor-fold defaultstate="collapsed" desc="Menu Item Connect Click">
     private void jMenuItemConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemConnectActionPerformed
         connectionSettingsFrame = new gui.mysql.ConnectionSettingsFrame();
@@ -241,25 +180,6 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
 
     }//GEN-LAST:event_formWindowOpened
     //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Table Clicked">
-    private void jTableToDoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableToDoMouseClicked
-        int selectedIndex = jTableToDo.getSelectedRow();
-        if (prevSelectedIndex == selectedIndex) {
-            ArrayList<String> columns = new ArrayList<>();
-            columns.add("Name");
-            ArrayList<String> values = new ArrayList<>();
-            values.add((String) tableModel.getValueAt(selectedIndex, 0));
-            try {
-                connectionSettings.setDelete("ToDo", columns, values);
-            } catch (SQLException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            FillToDoList();
-        } else {
-            prevSelectedIndex = jTableToDo.getSelectedRow();
-        }
-    }//GEN-LAST:event_jTableToDoMouseClicked
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Generated Code">
@@ -280,16 +200,7 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
 
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainFrame.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
@@ -297,6 +208,7 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new MainFrame().setVisible(true);
             }
@@ -305,25 +217,24 @@ public class MainFrame extends javax.swing.JFrame implements ParentFormInterface
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItemConnect;
     private javax.swing.JMenuItem jMenuItemDisconnect;
     private javax.swing.JMenu jMenuServer;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTableToDo;
-    private gui.QuickAdd quickAdd;
     // End of variables declaration//GEN-END:variables
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Update (listener function)">
     @Override
-    public void UpdateForm(String function, ArrayList<Object> args) {
-        if (function.equals("updateSettings")) {
-            MySQL arg = (MySQL) args.get(0);
-            updateSettings(arg);
-        } else if (function.equals("FillToDoList")) {
-            FillToDoList();
+    public void UpdateForm(String function, Object args) {
+        switch (function) {
+            case "updateSettings":
+                updateSettings((MySQL) args);
+                break;
+            case "AddTask":
+                AddTask((Task) args);
+                break;
         }
     }
-    //</editor-fold>
     //</editor-fold>
 }
