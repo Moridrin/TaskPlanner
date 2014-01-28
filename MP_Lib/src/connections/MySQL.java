@@ -1,12 +1,11 @@
 //<editor-fold defaultstate="collapsed" desc="Jibberish">
 package connections;
 
-import java.awt.geom.Line2D;
 import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Observable;
 import java.util.logging.*;
+import exceptions.UnsupportedType;
 //</editor-fold>
 
 /**
@@ -42,186 +41,48 @@ public class MySQL implements Serializable {
     //</editor-fold>
 
     //<editor-fold desc="Functions">
-    //<editor-fold defaultstate="collapsed" desc="Set InsertInto SQL">
-    /**
-     * In this method the statement will be executed on the server.
-     *
-     * @param table
-     * @param columns
-     * @param values
-     *
-     * @throws SQLException it throws this exception instead of catching it
-     * here, so that the class calling this function knows what the problem is.
-     */
-    public void setInsertInto(String table, ArrayList<String> columns, ArrayList<String> values) throws SQLException {
-        int parameterIndex = 1;
-        StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append("INSERT INTO " + table + " (");
-        for (int i = 0; i < columns.size(); i++) {
-            if (i == columns.size() - 1) {
-                sqlBuilder.append(columns.get(i));
-            } else {
-                sqlBuilder.append(columns.get(i));
-                sqlBuilder.append(", ");
-            }
-        }
-        sqlBuilder.append(") VALUES (");
-        for (int i = 1; i <= values.size(); i++) {
-            if (i == values.size()) {
-                sqlBuilder.append("?");
-            } else {
-                sqlBuilder.append("?, ");
-            }
-        }
-        sqlBuilder.append(");");
-        String sql = sqlBuilder.toString();
-        PreparedStatement pst = null;
-        con = DriverManager.getConnection(url, user, password);
-        pst = con.prepareStatement(sql);
-        for (int i = 0; i < values.size(); i++) {
-            pst.setString(parameterIndex, values.get(i));
-            parameterIndex++;
-        }
-        try {
-            pst.executeUpdate();
-            if (con != null) {
-                con.close();
-            }
-        } catch (SQLException ex) {
-            Logger lgr = Logger.getLogger(MySQL.class.getName());
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
-        }
-    }
-    //</editor-fold>
-    
-    //<editor-fold defaultstate="collapsed" desc="Set Delete SQL">
-    /**
-     * In this method the statement will be executed on the server.
-     *
-     * @param table
-     * @param columns
-     * @param values
-     *
-     * @throws SQLException it throws this exception instead of catching it
-     * here, so that the class calling this function knows what the problem is.
-     */
-    public void setDelete(String table, ArrayList<String> columns, ArrayList<String> values) throws SQLException {
-        int parameterIndex = 1;
-        StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append("DELETE FROM " + table + " WHERE ");
-        for (int i = 0; i < columns.size(); i++) {
-            if (i == columns.size() - 1) {
-                sqlBuilder.append(table + columns.get(i));
-                sqlBuilder.append(" = ?");
-            } else {
-                sqlBuilder.append(columns.get(i));
-                sqlBuilder.append(" = ?, ");
-            }
-        }
-        sqlBuilder.append(";");
-        String sql = sqlBuilder.toString();
-        PreparedStatement pst = null;
-        con = DriverManager.getConnection(url, user, password);
-        pst = con.prepareStatement(sql);
-        for (int i = 0; i < values.size(); i++) {
-            pst.setString(parameterIndex, values.get(i));
-            parameterIndex++;
-        }
-        try {
-            pst.executeUpdate();
-            if (con != null) {
-                con.close();
-            }
-        } catch (SQLException ex) {
-            Logger lgr = Logger.getLogger(MySQL.class.getName());
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
-        }
-    }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Set Update SQL (NOT TESTED)">
-    /**
-     * In this method the statement will be executed on the server.
-     *
-     * @param table
-     * @param columns
-     * @param oldValues
-     *
-     * @throws SQLException it throws this exception instead of catching it
-     * here, so that the class calling this function knows what the problem is.
-     */
-    public void setUpdate(String table, ArrayList<String> columns, ArrayList<String> oldValues, ArrayList<String> newValues) throws SQLException {
-        int parameterIndex = 1;
-        StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append("UPDATE " + table + " SET ");
-        for (int i = 0; i < columns.size(); i++) {
-            sqlBuilder.append(columns.get(i));
-            sqlBuilder.append(" = ");
-            if (i == newValues.size()) {
-                sqlBuilder.append("?");
-            } else {
-                sqlBuilder.append("?, ");
-            }
-        }
-        sqlBuilder.append(" WHERE (");
-        for (int i = 0; i < columns.size(); i++) {
-            sqlBuilder.append(columns.get(i));
-            sqlBuilder.append(" = ");
-            if (i == oldValues.size()) {
-                sqlBuilder.append("?");
-            } else {
-                sqlBuilder.append("?, ");
-            }
-        }
-        sqlBuilder.append(");");
-        String sql = sqlBuilder.toString();
-        PreparedStatement pst = null;
-        con = DriverManager.getConnection(url, user, password);
-        pst = con.prepareStatement(sql);
-        for (int i = 0; i < oldValues.size(); i++) {
-            pst.setString(parameterIndex, oldValues.get(i));
-            parameterIndex++;
-        }
-        for (int i = 0; i < newValues.size(); i++) {
-            pst.setString(parameterIndex, newValues.get(i));
-            parameterIndex++;
-        }
-        try {
-            pst.executeUpdate();
-            if (con != null) {
-                con.close();
-            }
-        } catch (SQLException ex) {
-            Logger lgr = Logger.getLogger(MySQL.class.getName());
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
-        }
-    }
-    //</editor-fold>
-
     //<editor-fold defaultstate="collapsed" desc="Get SQL">
     /**
-     * This sends an SELECT statement to the Database and returns whatever comes
-     * back.
+     * This statement returns the result of the given SQL statement.
      *
-     * @param sql is the statement that will be send to the Database. Use "?"
-     * for
-     * @param columns contains a lost with the names of the columns that you ask
-     * for in the SQL Statement.
-     *
-     * @throws SQLException it throws this exception instead of catching it
-     * here, so that the class calling this function knows what the problem is.
-     * @return is a List of String Arrays so the multiple columns can be set in
-     * the Array, and the rows can be set as items in the List.
+     * @param sql this is the statement that will be executed.
+     * @param columns this is a list of all the columns you want to select from
+     * (this must be the same as in the SQL Statement).
+     * @param parameters this is a list of parameters you want to add to the SQL
+     * Statement. These parameters will be linked to "?" in the SQL Statement.
+     * @return this is a list of arrays with every item in the list as a row in
+     * the table, and the columns in the array.
+     * @throws SQLException this exception is thrown because the specifics of
+     * the error are useless in the library.
+     * @throws exceptions.UnsupportedType this exception is thrown when one of
+     * the parameters has a type that is not supported. (Supported types are:
+     * String, int, Double, Date)
      */
-    public ArrayList<String[]> getSQL(String sql, ArrayList<String> columns) throws SQLException {
+    public ArrayList<String[]> executeSQL(String sql, ArrayList<String> columns, ArrayList<Object> parameters) throws SQLException, UnsupportedType {
         ArrayList<String[]> returner = new ArrayList<>();
         PreparedStatement pst = null;
         ResultSet resultSet;
         con = DriverManager.getConnection(url, user, password);
-        for (int i = 0; i < columns.size(); i++) {
-            sql = sql.replaceFirst("\\?", columns.get(i));
-        }
         pst = con.prepareStatement(sql);
+        for (int i = 0; i < parameters.size(); i++) {
+            String className = String.valueOf(parameters.get(i).getClass());
+            switch (className) {
+                case "String":
+                    pst.setString(i, (String) parameters.get(i));
+                    break;
+                case "int":
+                    pst.setInt(i, (int) parameters.get(i));
+                    break;
+                case "double":
+                    pst.setDouble(i, (Double) parameters.get(i));
+                    break;
+                case "Date":
+                    pst.setDate(i, (Date) parameters.get(i));
+                    break;
+                default:
+                    throw new UnsupportedType(className);
+            }
+        }
         resultSet = pst.executeQuery();
         while (resultSet.next()) {
             String[] row = new String[columns.size()];
@@ -239,6 +100,54 @@ public class MySQL implements Serializable {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
         return returner;
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Set SQL">
+    /**
+     * This statement returns the result of the given SQL statement.
+     *
+     * @param sql this is the statement that will be executed.
+     * @param parameters this is a list of parameters you want to add to the SQL
+     * Statement. These parameters will be linked to "?" in the SQL Statement.
+     * @throws SQLException this exception is thrown because the specifics of
+     * the error are useless in the library.
+     * @throws exceptions.UnsupportedType this exception is thrown when one of
+     * the parameters has a type that is not supported. (Supported types are:
+     * String, int, Double, Date)
+     */
+    public void executeSQL(String sql, ArrayList<Object> parameters) throws SQLException, UnsupportedType {
+        PreparedStatement pst = null;
+        con = DriverManager.getConnection(url, user, password);
+        pst = con.prepareStatement(sql);
+        for (int i = 0; i < parameters.size(); i++) {
+            String className = String.valueOf(parameters.get(i).getClass());
+            switch (className) {
+                case "String":
+                    pst.setString(i, (String) parameters.get(i));
+                    break;
+                case "int":
+                    pst.setInt(i, (int) parameters.get(i));
+                    break;
+                case "double":
+                    pst.setDouble(i, (Double) parameters.get(i));
+                    break;
+                case "Date":
+                    pst.setDate(i, (Date) parameters.get(i));
+                    break;
+                default:
+                    throw new UnsupportedType(className);
+            }
+        }
+        pst.executeQuery();
+        try {
+            if (con != null) {
+                con.close();
+            }
+        } catch (SQLException ex) {
+            Logger lgr = Logger.getLogger(MySQL.class.getName());
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        }
     }
     //</editor-fold>
     //</editor-fold>
