@@ -17,11 +17,11 @@ package exceptions;
  *
  * @author jeroen
  */
-public class UnsupportedType extends Exception
+public class UnknownSmallMetricPrefix extends Exception
 {
-      public UnsupportedType() {}
+      public UnknownSmallMetricPrefix() {}
 
-      public UnsupportedType(String message)
+      public UnknownSmallMetricPrefix(String message)
       {
          super(message);
       }
